@@ -2,10 +2,11 @@ FastRLock
 ---------
 
 This is a C-level implementation of a fast, re-entrant, optimistic lock for CPython.
-It is written in Cython.  Under normal conditions, it is about 10x faster than
-threading.RLock in Python 2.7 because it avoids all locking unless two or more threads
-try to acquire it at the same time.  Under congestion, it is still about 10% faster
-than RLock due to being implemented in Cython.
+It is written in `Cython <http://cython.org>`_.
+Under normal conditions, it is about 10x faster than threading.RLock in Python 2.7
+because it avoids all locking unless two or more threads try to acquire it at the
+same time.  Under congestion, it is still about 10% faster than RLock due to being
+implemented in Cython.
 
 This is mostly equivalent to the revised RLock implementation in Python 3.2,
 but still faster due to being implemented in Cython.
