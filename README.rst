@@ -3,8 +3,8 @@ FastRLock
 
 This is a C-level implementation of a fast, re-entrant, optimistic lock for CPython.
 It is written in Cython.  Under normal conditions, it is about 10x faster than
-threading.RLock because it avoids all locking unless two or more threads try
-to acquire it at the same time.  Under congestion, it is still about 10% faster
+threading.RLock in Python 2.7 because it avoids all locking unless two or more threads
+try to acquire it at the same time.  Under congestion, it is still about 10% faster
 than RLock due to being implemented in Cython.
 
 This is mostly equivalent to the revised RLock implementation in Python 3.2,
@@ -47,18 +47,18 @@ code slips in accidentally.
 How fast is it?
 ---------------
 
-Here are some timings for Python 2.7:
+Here are some timings for Python 2.7 for the following scenarios:
 
-1) five acquire-release cycles ('lock_unlock'),
-2) five acquire calls followed by five release calls (nested locking, 'reentrant_lock_unlock'),
-3) a mixed and partly nested sequence of acquire and release calls ('mixed_lock_unlock') and
-4) five acquire-release cycles that do not block.
+1) five acquire-release cycles ('lock_unlock')
+2) five acquire calls followed by five release calls (nested locking, 'reentrant_lock_unlock')
+3) a mixed and partly nested sequence of acquire and release calls ('mixed_lock_unlock')
+4) five acquire-release cycles that do not block ('lock_unlock_nonblocking')
 
 All four are benchmarked for the single threaded case and the multi threaded case
 with 10 threads.  I also tested it with 20 threads only to see that it then takes
-about twice the time.  Note also that the congested case is substantially slower
-for both locks, so I only looped 1000x here to get useful timings instead of
-100000x for the single threaded case.
+about twice the time for both versions.  Note also that the congested case is
+substantially slower for both locks, so I only looped 1000x here to get useful
+timings instead of 100000x for the single threaded case.
 
 ::
 
