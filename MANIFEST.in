@@ -1,2 +1,2 @@
 recursive-include fastrlock *.py *.pyx *.pxd *.c
-include setup.py MANIFEST.in
+include setup.py MANIFEST.in *.rst
