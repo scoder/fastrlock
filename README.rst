@@ -13,6 +13,8 @@ but still faster due to being implemented in Cython.
 It was initially published as a code recipe here:
 https://code.activestate.com/recipes/577336-fast-re-entrant-optimistic-lock-implemented-in-cyt/
 
+FastRLock has been used and tested in `Lupa <https://github.com/scoder/lupa>`_ for several years.
+
 
 How does it work?
 -----------------
