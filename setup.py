@@ -3,7 +3,7 @@ import sys
 import os
 from distutils.core import setup, Extension
 
-VERSION = '0.1'
+VERSION = '0.2'
 
 BASEDIR = os.path.dirname(__file__)
 PKGNAME = 'fastrlock'
