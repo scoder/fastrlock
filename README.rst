@@ -13,7 +13,9 @@ same time.  Under congestion, it is still about 10% faster than RLock due to bei
 implemented in Cython.
 
 This is mostly equivalent to the revised RLock implementation in Python 3.2,
-but still faster due to being implemented in Cython.
+but still faster due to being implemented in Cython.  Note that the ``threading.RLock``
+implementation in Python 3.4 and later tends to be as fast or even faster than
+the lock provided by this package.
 
 It was initially published as a code recipe here:
 https://code.activestate.com/recipes/577336-fast-re-entrant-optimistic-lock-implemented-in-cyt/
