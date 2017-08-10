@@ -1,9 +1,13 @@
 
 import sys
 import os
+import re
 from distutils.core import setup, Extension
 
-VERSION = '0.2'
+with open('fastrlock/__init__.py') as f:
+    VERSION = re.search(
+        r'^__version__ \s* = \s* ["\'] ([0-9ab.]+) ["\']',
+        f.read(), re.MULTILINE|re.VERBOSE).group(1)
 
 BASEDIR = os.path.dirname(__file__)
 PKGNAME = 'fastrlock'
