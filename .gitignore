@@ -7,11 +7,17 @@ fastrlock/*.c
 MANIFEST
 build/
 dist/
+releases/
 cython_debug/
+wheelhouse/
 .idea/
 .git/
 .coverage
 .tox
+.hg
+.cache
+.hgignore
+*.egg-info
 *.orig
 *.rej
 *.dep
