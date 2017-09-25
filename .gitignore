@@ -9,7 +9,7 @@ build/
 dist/
 releases/
 cython_debug/
-wheelhouse/
+wheelhouse*/
 .idea/
 .git/
 .coverage
