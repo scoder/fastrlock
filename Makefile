@@ -37,7 +37,7 @@ wheel_manylinux32 wheel_manylinux64: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 	mkdir -p wheelhouse$(subst wheel_manylinux,,$@)
 	time docker run --rm -t \
 		-v $(shell pwd):/io \
-		-e CFLAGS="-O3 -g0 -mtune=generic -pipe -fPIC" \
+		-e CFLAGS="-O3 -g1 -mtune=generic -pipe -fPIC" \
 		-e LDFLAGS="$(LDFLAGS) -fPIC" \
 		-e WHEELHOUSE=wheelhouse$(subst wheel_manylinux,,$@) \
 		$(if $(patsubst %32,,$@),$(MANYLINUX_IMAGE_X86_64),$(MANYLINUX_IMAGE_686)) \
