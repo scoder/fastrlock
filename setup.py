@@ -112,7 +112,7 @@ setup(
     ],
 
     packages=[PKGNAME],
-    package_data = {PKGNAME: ['*.pxd']},
+    package_data = {PKGNAME: ['*.pxd', '*.pxi']},
     ext_modules = ext_modules,
     **extra_setup_args
 )
