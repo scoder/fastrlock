@@ -2,7 +2,7 @@
 import sys
 import os
 import re
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 with open('fastrlock/__init__.py') as f:
     VERSION = re.search(
