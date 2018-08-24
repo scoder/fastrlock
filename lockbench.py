@@ -3,6 +3,7 @@ from threading import Thread
 from threading import RLock
 from fastrlock.rlock import FastRLock as FLock
 
+
 def lock_unlock(l):
     l.acquire()
     l.release()
@@ -14,6 +15,7 @@ def lock_unlock(l):
     l.release()
     l.acquire()
     l.release()
+
 
 def reentrant_lock_unlock(l):
     l.acquire()
@@ -27,6 +29,7 @@ def reentrant_lock_unlock(l):
     l.release()
     l.release()
 
+
 def mixed_lock_unlock(l):
     l.acquire()
     l.release()
@@ -38,6 +41,28 @@ def mixed_lock_unlock(l):
     l.acquire()
     l.release()
     l.release()
+
+
+def context_manager(l):
+    with l: pass
+    with l:
+        with l:
+            with l: pass
+            with l: pass
+        with l:
+            with l: pass
+        with l:
+            with l: pass
+            with l: pass
+    with l: pass
+    with l:
+        with l:
+            with l: pass
+            with l: pass
+            with l:
+                with l: pass
+    with l: pass
+
 
 def lock_unlock_nonblocking(l):
     if l.acquire(False):
@@ -66,12 +91,26 @@ if __name__ == '__main__':
         reentrant_lock_unlock,
         mixed_lock_unlock,
         lock_unlock_nonblocking,
+        context_manager,
         ]
 
+    import sys
     from timeit import Timer
     from functools import partial
 
-    for name, lock in [('RLock', RLock()), ('FLock', FLock())]:
+    rlock, flock = ('RLock', RLock()), ('FLock', FLock())
+    locks = []
+    args = sys.argv[1:]
+    if not args:
+        locks = [rlock, flock]
+    else:
+        if 'rlock' in args:
+            locks.append(rlock)
+        if 'flock' in args:
+            locks.append(flock)
+    assert locks, args
+
+    for name, lock in locks:
         print('Testing %s' % name)
         repeat_count = 100000
         print("sequential (x%d):" % repeat_count)
