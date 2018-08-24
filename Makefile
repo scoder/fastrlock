@@ -42,11 +42,21 @@ wheel_manylinux32 wheel_manylinux64: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 		-e WHEELHOUSE=wheelhouse$(subst wheel_manylinux,,$@) \
 		$(if $(patsubst %32,,$@),$(MANYLINUX_IMAGE_X86_64),$(MANYLINUX_IMAGE_686)) \
 		bash -c 'for PYBIN in /opt/python/*/bin; do \
-		    $$PYBIN/python -V; \
-		    $$PYBIN/pip install -U pip setuptools; \
-		    { $$PYBIN/pip wheel -w /io/$$WHEELHOUSE /io/$< & } ; \
-		    done; wait; \
-		    for whl in /io/$$WHEELHOUSE/$(PACKAGENAME)-$(VERSION)-*-linux_*.whl; do auditwheel repair $$whl -w /io/$$WHEELHOUSE; done'
+		    PYVER="$$($$PYBIN/python -V)"; \
+		    PROFDIR="prof-$${PYVER// /_}"; \
+		    echo $$PYVER; \
+		    $$PYBIN/pip install -U pip setuptools wheel; \
+		    rm -fr /io/$$WHEELHOUSE/$(PACKAGENAME)-$(VERSION)/; \
+		    tar zxf /io/$< -C /io/$$WHEELHOUSE && cd /io/$$WHEELHOUSE/$(PACKAGENAME)-$(VERSION)/ || exit 1; \
+		    CFLAGS="$$CFLAGS -fprofile-generate -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py build_ext -i; \
+		    $$PYBIN/python lockbench.py rlock flock; \
+		    CFLAGS="$$CFLAGS -fprofile-use -fprofile-correction -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py build_ext -i -f; \
+		    $$PYBIN/python lockbench.py flock; \
+		    CFLAGS="$$CFLAGS -fprofile-use -fprofile-correction -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py bdist_wheel; \
+		    mv dist/*.whl /io/$$WHEELHOUSE/; \
+		    rm -fr /io/$$WHEELHOUSE/$(PACKAGENAME)-$(VERSION)/; \
+		    done; \
+		    for whl in dist/$(PACKAGENAME)-$(VERSION)-*-linux_*.whl; do auditwheel repair $$whl -w /io/$$WHEELHOUSE; done'
 
 clean:
 	find . \( -name '*.o' -o -name '*.so' -o -name '*.py[cod]' -o -name '*.dll' \) -exec rm -f {} \;
