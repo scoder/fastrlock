@@ -30,7 +30,7 @@ build:
 wheel:
 	$(PYTHON) setup.py $(SETUPFLAGS) bdist_wheel $(PYTHON_WITH_CYTHON)
 
-wheel_manylinux: wheel_manylinux64 wheel_manylinux32
+wheel_manylinux: sdist wheel_manylinux64 wheel_manylinux32
 
 wheel_manylinux32 wheel_manylinux64: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 	echo "Building wheels for $(PACKAGENAME) $(VERSION)"
@@ -43,6 +43,7 @@ wheel_manylinux32 wheel_manylinux64: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 		$(if $(patsubst %32,,$@),$(MANYLINUX_IMAGE_X86_64),$(MANYLINUX_IMAGE_686)) \
 		bash -c 'for PYBIN in /opt/python/*/bin; do \
 		    $$PYBIN/python -V; \
+		    $$PYBIN/pip install -U pip setuptools; \
 		    { $$PYBIN/pip wheel -w /io/$$WHEELHOUSE /io/$< & } ; \
 		    done; wait; \
 		    for whl in /io/$$WHEELHOUSE/$(PACKAGENAME)-$(VERSION)-*-linux_*.whl; do auditwheel repair $$whl -w /io/$$WHEELHOUSE; done'
