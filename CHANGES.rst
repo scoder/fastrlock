@@ -7,6 +7,8 @@ fastrlock changelog
 
 * Rebuild with Cython 0.28.5.
 
+* Linux wheels are faster through profile guided optimisation.
+
 * Add missing file to sdist.
   (patch by Mark Harfouche, Github issue #5)
 
