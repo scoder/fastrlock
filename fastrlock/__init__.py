@@ -1,6 +1,6 @@
 # this is a package
 
-__version__ = "0.3"
+__version__ = "0.4"
 
 
 class LockNotAcquired(Exception):

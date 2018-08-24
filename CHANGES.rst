@@ -2,6 +2,15 @@
 fastrlock changelog
 ===================
 
+0.4 (2018-08-24)
+================
+
+* Rebuild with Cython 0.28.5.
+
+* Add missing file to sdist.
+  (patch by Mark Harfouche, Github issue #5)
+
+
 0.3 (2017-08-10)
 ================
 
