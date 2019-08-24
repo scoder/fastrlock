@@ -1,2 +1,3 @@
 recursive-include fastrlock *.py *.pyx *.pxi *.pxd *.c
-include setup.py lockbench.py LICENSE MANIFEST.in *.rst Makefile
+include setup.py lockbench.py LICENSE MANIFEST.in *.rst Makefile tox.ini
+include appveyor.yml appveyor_env.cmd requirements-appveyor.txt
