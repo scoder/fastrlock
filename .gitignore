@@ -7,9 +7,10 @@ fastrlock/*.c
 MANIFEST
 build/
 dist/
+venv*/
 releases/
 cython_debug/
-wheelhouse*/
+*wheel*/
 .idea/
 .git/
 .coverage
