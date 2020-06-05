@@ -2,6 +2,12 @@
 fastrlock changelog
 ===================
 
+0.5 (2020-06-05)
+================
+
+* Rebuild with Cython 0.29.20 to support Py3.8 and later.
+
+
 0.4 (2018-08-24)
 ================
 
