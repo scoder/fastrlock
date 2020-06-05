@@ -48,7 +48,7 @@ wheel_manylinux32 wheel_manylinux64: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 				PYVER="$$($$PYBIN/python -V)"; \
 				PROFDIR="prof-$${PYVER// /_}"; \
 				echo $$PYVER; \
-				$$PYBIN/pip install -U pip setuptools wheel; \
+				$$PYBIN/pip install -U pip setuptools; \
 				make clean; rm -fr $$PROFDIR; \
 				CFLAGS="$$CFLAGS -fprofile-generate -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py build_ext -i; \
 				$$PYBIN/python lockbench.py rlock flock; \
