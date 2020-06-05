@@ -15,16 +15,6 @@ PKGDIR = os.path.join(BASEDIR, PKGNAME)
 MODULES = [filename[:-4] for filename in os.listdir(PKGDIR)
            if filename.endswith('.pyx')]
 
-ext_args = {}
-extra_setup_args = {}
-
-
-# support 'test' target if setuptools/distribute is available
-
-if 'setuptools' in sys.modules:
-    extra_setup_args['test_suite'] = 'fastrlock.tests.suite'
-    extra_setup_args["zip_safe"] = False
-
 
 def has_option(name):
     if name in sys.argv[1:]:
@@ -33,8 +23,11 @@ def has_option(name):
     return False
 
 
+ext_args = {
+    'define_macros': [('CYTHON_CLINE_IN_TRACEBACK', '1')],
+}
 if has_option('--without-assert'):
-    ext_args['define_macros'] = [('CYTHON_WITHOUT_ASSERTIONS', None)]
+    ext_args['define_macros'].append(('CYTHON_WITHOUT_ASSERTIONS', None))
 
 
 use_cython = has_option('--with-cython')
@@ -86,18 +79,14 @@ long_description = '\n\n'.join([
     for text_file in ['README.rst', 'CHANGES.rst']])
 
 
-if sys.version_info >= (2,6):
-    extra_setup_args['license'] = 'MIT style'
-
-
 setup(
     name="fastrlock",
     version=VERSION,
     author="Stefan Behnel",
     author_email="stefan_ml@behnel.de",
     url="https://github.com/scoder/fastrlock",
+    license='MIT style',
     description="Fast, re-entrant optimistic lock implemented in Cython",
-
     long_description=long_description,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -112,7 +101,10 @@ setup(
     ],
 
     packages=[PKGNAME],
-    package_data = {PKGNAME: ['*.pxd', '*.pxi']},
-    ext_modules = ext_modules,
-    **extra_setup_args
+    package_data={PKGNAME: ['*.pxd', '*.pxi']},
+    ext_modules=ext_modules,
+    zip_safe=False,
+
+    # support 'test' target if setuptools/distribute is available
+    test_suite='fastrlock.tests.suite',
 )
