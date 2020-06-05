@@ -32,7 +32,7 @@ cdef class FastRLock:
 
     def acquire(self, bint blocking=True):
         return _lock_rlock(
-            &self._real_lock, pythread.PyThread_get_thread_ident(), blocking)
+            &self._real_lock, <long>pythread.PyThread_get_thread_ident(), blocking)
 
     def release(self):
         if self._real_lock.owner == -1:
@@ -42,18 +42,18 @@ cdef class FastRLock:
     def __enter__(self):
         # self.acquire()
         if not _lock_rlock(
-                &self._real_lock, pythread.PyThread_get_thread_ident(),
+                &self._real_lock, <long>pythread.PyThread_get_thread_ident(),
                 blocking=True):
             raise LockNotAcquired()
 
     def __exit__(self, t, v, tb):
         # self.release()
-        if self._real_lock.owner != pythread.PyThread_get_thread_ident():
+        if self._real_lock.owner != <long>pythread.PyThread_get_thread_ident():
             raise RuntimeError("cannot release un-acquired lock")
         _unlock_lock(&self._real_lock)
 
     def _is_owned(self):
-        return self._real_lock.owner == pythread.PyThread_get_thread_ident()
+        return self._real_lock.owner == <long>pythread.PyThread_get_thread_ident()
 
 
 cdef inline bint _lock_rlock(_LockStatus *lock, long current_thread,
@@ -91,7 +91,7 @@ cdef bint lock_fastrlock(rlock, long current_thread, bint blocking) except -1:
     Public C level entry function for locking a FastRlock instance.
     """
     if current_thread == -1:
-        current_thread = pythread.PyThread_get_thread_ident()
+        current_thread = <long>pythread.PyThread_get_thread_ident()
     return _lock_rlock(&(<FastRLock?>rlock)._real_lock, current_thread, blocking)
 
 
