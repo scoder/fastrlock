@@ -7,8 +7,8 @@ VERSION=$(shell python -c 'import re; f=open("fastrlock/__init__.py"); print(re.
 PYTHON_WITH_CYTHON=$(shell $(PYTHON)  -c 'import Cython.Compiler' >/dev/null 2>/dev/null && echo " --with-cython" || true)
 PY3_WITH_CYTHON=$(shell $(PYTHON3) -c 'import Cython.Compiler' >/dev/null 2>/dev/null && echo " --with-cython" || true)
 
-MANYLINUX_IMAGE_X86_64=quay.io/pypa/manylinux1_x86_64
-MANYLINUX_IMAGE_686=quay.io/pypa/manylinux1_i686
+MANYLINUX_IMAGE_X86_64=quay.io/pypa/manylinux2010_x86_64
+MANYLINUX_IMAGE_686=quay.io/pypa/manylinux2010_i686
 
 .PHONY: all version inplace sdist build clean wheel_manylinux wheel_manylinux32 wheel_manylinux64 wheel
 
