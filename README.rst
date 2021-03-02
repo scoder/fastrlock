@@ -136,3 +136,36 @@ Here is the same benchmark run with Py3.2::
 So, in the single-threaded case, the C implementation in Py3.2 is only
 about 20-50% slower than the Cython implementation here, whereas it is
 more or less as fast in the congested case.
+
+Here is the same benchmark run with Python 3.8::
+
+
+    3.8.6 | packaged by conda-forge | (default, Nov  2 2020, 13:59:27)
+    [GCC 7.5.0]
+    fastrlock version = 0.5
+    Testing RLock
+    sequential (x100000):
+    lock_unlock              : 0.065 sec
+    reentrant_lock_unlock    : 0.048 sec
+    mixed_lock_unlock        : 0.054 sec
+    lock_unlock_nonblocking  : 0.070 sec
+    context_manager          : 0.227 sec
+    threaded 10T (x1000):
+    lock_unlock              : 0.486 sec
+    reentrant_lock_unlock    : 0.483 sec
+    mixed_lock_unlock        : 0.491 sec
+    lock_unlock_nonblocking  : 0.490 sec
+    context_manager          : 0.515 sec
+    Testing FLock
+    sequential (x100000):
+    lock_unlock              : 0.070 sec
+    reentrant_lock_unlock    : 0.073 sec
+    mixed_lock_unlock        : 0.080 sec
+    lock_unlock_nonblocking  : 0.076 sec
+    context_manager          : 0.302 sec
+    threaded 10T (x1000):
+    lock_unlock              : 0.496 sec
+    reentrant_lock_unlock    : 0.511 sec
+    mixed_lock_unlock        : 0.488 sec
+    lock_unlock_nonblocking  : 0.506 sec
+    context_manager          : 0.526 sec
