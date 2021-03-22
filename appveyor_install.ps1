@@ -53,7 +53,7 @@ function InstallPython ($python_version, $architecture, $python_home) {
         $arch_suffix = @{"32"="";"64"=".amd64"}[$architecture]
         $filename = "python-" + $python_version + $arch_suffix + ".msi"
     }
-    $url = $PYTHON_BASE_URL + $python_version + "/" + $filename
+    $url = $PYTHON_BASE_URL + $python_version + ".0/" + $filename
     $filepath = Download $url $filename $DOWNLOADS
     Write-Host "Installing" $filename "to" $python_home
     if ($installer_exe) {
