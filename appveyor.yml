@@ -47,9 +47,9 @@ install:
   - ps: 'ls "C:/Program Files/Microsoft SDKs/Windows"'
   #- python -m pip install --upgrade setuptools pip
   - "powershell .\\appveyor_install.ps1"
-  - python --version
-  - python -m pip install -r requirements-appveyor.txt
-  - python setup.py build_ext --inplace --with-cython
+  - "%PYTHON%\\python.exe --version"
+  - "%PYTHON%\\python.exe -m pip install -r requirements-appveyor.txt"
+  - "%PYTHON%\\python.exe setup.py build_ext --inplace --with-cython"
 
 build: false  # First tests then build (is python not C)
 
@@ -57,10 +57,10 @@ test_script:
   - tox -e %TOXENV%-windows
 
 after_test:
-  - pip install --upgrade wheel
-  - python setup.py build_ext --inplace
+  - "%PYTHON%\\Scripts\\pip.exe install --upgrade wheel"
+  - "%PYTHON%\\python.exe setup.py build_ext --inplace"
   - rm -rf build # account for: https://bitbucket.org/pypa/wheel/issues/147/bdist_wheel-should-start-by-cleaning-up
-  - python setup.py sdist bdist_wheel
+  - "%PYTHON%\\python.exe setup.py sdist bdist_wheel"
 
 artifacts:
   # bdist_wheel puts your built wheel in the dist directory
