@@ -101,7 +101,8 @@ function InstallPipPackage ($python_home, $package) {
 }
 
 function main () {
-    InstallPython $env:PYTHON_VERSION + ".0" $env:PYTHON_ARCH $env:PYTHON
+    $full_version = $env:PYTHON_VERSION + ".0"
+    InstallPython $full_version $env:PYTHON_ARCH $env:PYTHON
     InstallPip $env:PYTHON
     InstallPipPackage $env:PYTHON setuptools
     InstallPipPackage $env:PYTHON wheel
