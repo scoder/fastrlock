@@ -2,6 +2,12 @@
 fastrlock changelog
 ===================
 
+0.6 (2021-03-21)
+================
+
+* Rebuild with Cython 0.29.22 to support Py3.9 and later.
+
+
 0.5 (2020-06-05)
 ================
 

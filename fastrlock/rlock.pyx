@@ -1,3 +1,4 @@
+# cython: language_level=3
 # cython: binding=True
 
 from cpython cimport pythread
