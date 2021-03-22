@@ -51,9 +51,9 @@ wheel_manylinux32 wheel_manylinux64: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 				$$PYBIN/pip install -U pip setuptools; \
 				make clean; rm -fr $$PROFDIR; \
 				CFLAGS="$$CFLAGS -fprofile-generate -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py build_ext -i; \
-				$$PYBIN/python lockbench.py rlock flock; \
-				CFLAGS="$$CFLAGS -fprofile-use -fprofile-correction -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py build_ext -i -f; \
 				$$PYBIN/python lockbench.py flock; \
+				CFLAGS="$$CFLAGS -fprofile-use -fprofile-correction -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py build_ext -i -f; \
+				$$PYBIN/python lockbench.py rlock flock; \
 				CFLAGS="$$CFLAGS -fprofile-use -fprofile-correction -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py bdist_wheel; \
 		    done; \
 		    for whl in dist/$(PACKAGENAME)-$(VERSION)-*-linux_*.whl; do auditwheel repair $$whl -w /io/$$WHEELHOUSE; done; \
