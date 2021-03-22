@@ -40,13 +40,14 @@ init:
   - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
 
   - 'ECHO %TOXENV% '
-  - "powershell .\\appveyor_install.ps1"
   - python --version
 
 install:
   - ECHO 'Installed SDKs:'
   - ps: 'ls "C:/Program Files/Microsoft SDKs/Windows"'
   #- python -m pip install --upgrade setuptools pip
+  - "powershell .\\appveyor_install.ps1"
+  - python --version
   - python -m pip install -r requirements-appveyor.txt
   - python setup.py build_ext --inplace --with-cython
 
