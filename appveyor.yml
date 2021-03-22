@@ -35,8 +35,8 @@ init:
   - set PYTHON=C:\PYTHON%PY_VER%
   - if %PLATFORM%==x64 (set PYTHON=%PYTHON%-x64)
   - set TOXPYTHON=%PYTHON%\python.exe
-  - set PYTHON_ARCH="32"
-  - if %PLATFORM%==x64 (set PYTHON_ARCH="64")
+  - set PYTHON_ARCH=32
+  - if %PLATFORM%==x64 (set PYTHON_ARCH=64)
 
   # Put desired Python version in PATH
   - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
