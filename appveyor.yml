@@ -22,12 +22,12 @@ environment:
   # Note: TWINE_PASSWORD is set in Appveyor settings
 
   matrix:
-    - PYTHON_VERSION: 2.7
-    - PYTHON_VERSION: 3.5
-    - PYTHON_VERSION: 3.6
-    - PYTHON_VERSION: 3.7
-    - PYTHON_VERSION: 3.8
     - PYTHON_VERSION: 3.9
+    - PYTHON_VERSION: 3.8
+    - PYTHON_VERSION: 3.7
+    - PYTHON_VERSION: 3.6
+    - PYTHON_VERSION: 3.5
+    - PYTHON_VERSION: 2.7
 
 init:
   - set PY_VER=%PYTHON_VERSION:.=%
