@@ -20,7 +20,7 @@ cdef class FastRLock:
     def __cinit__(self):
         self._real_lock = _LockStatus(
             lock=pythread.PyThread_allocate_lock(),
-            owner=-1, is_locked=False, pending_requests=0, entry_count=0)
+            owner=0, is_locked=False, pending_requests=0, entry_count=0)
         if not self._real_lock.lock:
             raise MemoryError()
 
@@ -33,31 +33,30 @@ cdef class FastRLock:
 
     def acquire(self, bint blocking=True):
         return _lock_rlock(
-            &self._real_lock, <long>pythread.PyThread_get_thread_ident(), blocking)
+            &self._real_lock, pythread.PyThread_get_thread_ident(), blocking)
 
     def release(self):
-        if self._real_lock.owner == -1:
+        if self._real_lock.entry_count == 0:
             raise RuntimeError("cannot release un-acquired lock")
         _unlock_lock(&self._real_lock)
 
     def __enter__(self):
         # self.acquire()
         if not _lock_rlock(
-                &self._real_lock, <long>pythread.PyThread_get_thread_ident(),
-                blocking=True):
+                &self._real_lock, pythread.PyThread_get_thread_ident(), blocking=True):
             raise LockNotAcquired()
 
     def __exit__(self, t, v, tb):
         # self.release()
-        if self._real_lock.owner != <long>pythread.PyThread_get_thread_ident():
+        if self._real_lock.entry_count == 0 or self._real_lock.owner != pythread.PyThread_get_thread_ident():
             raise RuntimeError("cannot release un-acquired lock")
         _unlock_lock(&self._real_lock)
 
     def _is_owned(self):
-        return self._real_lock.owner == <long>pythread.PyThread_get_thread_ident()
+        return self._real_lock.entry_count > 0 and self._real_lock.owner == pythread.PyThread_get_thread_ident()
 
 
-cdef inline bint _lock_rlock(_LockStatus *lock, long current_thread,
+cdef inline bint _lock_rlock(_LockStatus *lock, pythread_t current_thread,
                              bint blocking) nogil:
     # Note that this function *must* hold the GIL when being called.
     # We just use 'nogil' in the signature to make sure that no Python
@@ -90,10 +89,11 @@ cdef create_fastrlock():
 cdef bint lock_fastrlock(rlock, long current_thread, bint blocking) except -1:
     """
     Public C level entry function for locking a FastRlock instance.
+    
+    The 'current_thread' argument is deprecated and ignored.  Pass -1 for backwards compatibility.
     """
-    if current_thread == -1:
-        current_thread = <long>pythread.PyThread_get_thread_ident()
-    return _lock_rlock(&(<FastRLock?>rlock)._real_lock, current_thread, blocking)
+    # Note: 'current_thread' used to be set to -1 or the current thread ID, but -1 is signed while "pythread_t" isn't.
+    return _lock_rlock(&(<FastRLock?>rlock)._real_lock, pythread.PyThread_get_thread_ident(), blocking)
 
 
 cdef int unlock_fastrlock(rlock) except -1:

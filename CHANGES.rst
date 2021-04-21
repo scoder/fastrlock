@@ -2,6 +2,13 @@
 fastrlock changelog
 ===================
 
+Upcoming release
+================
+
+* Adapted for unsigned thread IDs, as used by Py3.7+.
+  (original patch by Guilherme Dantas)
+
+
 0.6 (2021-03-21)
 ================
 
