@@ -1,4 +1,4 @@
-
+import fastrlock
 from threading import Thread
 from threading import RLock
 from fastrlock.rlock import FastRLock as FLock
@@ -110,6 +110,8 @@ if __name__ == '__main__':
             locks.append(flock)
     assert locks, args
 
+    print(sys.version)
+    print("fastrlock version = " + str(fastrlock.__version__))
     for name, lock in locks:
         print('Testing %s' % name)
         repeat_count = 100000
