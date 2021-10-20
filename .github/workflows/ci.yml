@@ -9,18 +9,30 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
+
     - name: Install Dependency
       run: |
         pip install cython
+
     - name: Building wheel
       run: |
         make -j3 wheel_manylinux
+
     - name: Copy wheels in dist
       run: cp wheelhouse*/fastrlock*.whl dist/
+
+    - name: Archive Wheels
+      uses: actions/upload-artifact@v2
+      with:
+        name: wheels
+        path: dist/*manylinux*.whl
+        if-no-files-found: ignore
+
     - name: Push build artifacts to PyPI
       if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@v1.4.2
