@@ -57,7 +57,7 @@ wheel_%: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 				$$PYBIN/pip install -U pip setuptools; \
 				make clean; rm -fr $$PROFDIR; \
 				CFLAGS="$$CFLAGS -fprofile-generate -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py build_ext -i; \
-				$$PYBIN/python lockbench.py flock; \
+				$$PYBIN/python lockbench.py flock quick; \
 				CFLAGS="$$CFLAGS -fprofile-use -fprofile-correction -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py build_ext -i -f; \
 				$$PYBIN/python lockbench.py rlock flock; \
 				CFLAGS="$$CFLAGS -fprofile-use -fprofile-correction -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py bdist_wheel; \
