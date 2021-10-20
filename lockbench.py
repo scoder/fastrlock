@@ -101,29 +101,27 @@ if __name__ == '__main__':
     repeat_count = 100000
     repeat_count_t = 1000
 
-    rlock, flock = ('RLock', RLock()), ('FLock', FLock())
+    rlock, flock = ('threading.RLock', RLock()), ('FastRLock', FLock())
     locks = []
     args = sys.argv[1:]
-    if not args:
+    if 'rlock' in args:
+        locks.append(rlock)
+    if 'flock' in args:
+        locks.append(flock)
+    if not locks:
         locks = [rlock, flock]
-    else:
-        if 'rlock' in args:
-            locks.append(rlock)
-        if 'flock' in args:
-            locks.append(flock)
-        for _ in range(args.count('quick')):
-            repeat_count = max(10, repeat_count // 100)
-            repeat_count_t = max(5, repeat_count_t // 10)
-    assert locks, args
+    for _ in range(args.count('quick')):
+        repeat_count = max(10, repeat_count // 100)
+        repeat_count_t = max(5, repeat_count_t // 10)
 
     for name, lock in locks:
         print('Testing %s' % name)
         print("sequential (x%d):" % repeat_count)
         for function in functions:
             timer = Timer(partial(function, lock))
-            print('%-25s: %.3f sec' % (function.__name__, max(timer.repeat(repeat=4, number=repeat_count))))
+            print('%-25s: %9.2f msec' % (function.__name__, max(timer.repeat(repeat=4, number=repeat_count)) * 1000.0))
 
         print("threaded 10T (x%d):" % repeat_count_t)
         for function in functions:
             timer = Timer(partial(threaded, lock, function))
-            print('%-25s: %.3f sec' % (function.__name__, max(timer.repeat(repeat=4, number=repeat_count_t))))
+            print('%-25s: %9.2f msec' % (function.__name__, max(timer.repeat(repeat=4, number=repeat_count_t)) * 1000.0))
