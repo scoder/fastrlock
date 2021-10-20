@@ -28,7 +28,7 @@ jobs:
 
     - name: Building wheel
       run: |
-        make ${{ matrix.env.TARGET }}
+        make sdist ${{ matrix.env.TARGET }}
 
     - name: Copy wheels in dist
       run: cp wheelhouse*/fastrlock*.whl dist/

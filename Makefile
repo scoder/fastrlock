@@ -23,7 +23,7 @@ version:
 inplace:
 	$(PYTHON) setup.py $(SETUPFLAGS) build_ext -i $(PYTHON_WITH_CYTHON)
 
-sdist:
+sdist dist/$(PACKAGENAME)-$(VERSION).tar.gz:
 	$(PYTHON) setup.py $(SETUPFLAGS) sdist $(PYTHON_WITH_CYTHON)
 
 build:
