@@ -59,7 +59,7 @@ wheel_%: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 				CFLAGS="$$CFLAGS -fprofile-generate -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py build_ext -i; \
 				$$PYBIN/python lockbench.py flock quick; \
 				CFLAGS="$$CFLAGS -fprofile-use -fprofile-correction -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py build_ext -i -f; \
-				$$PYBIN/python lockbench.py rlock flock; \
+				$$PYBIN/python lockbench.py rlock flock quick; \
 				CFLAGS="$$CFLAGS -fprofile-use -fprofile-correction -fprofile-dir=$$PROFDIR" $$PYBIN/python setup.py bdist_wheel; \
 		    done; \
 		    for whl in dist/$(PACKAGENAME)-$(VERSION)-*-linux_*.whl; do auditwheel repair $$whl -w /io/$$WHEELHOUSE; done; \
