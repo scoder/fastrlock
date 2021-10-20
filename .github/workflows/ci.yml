@@ -18,7 +18,7 @@ jobs:
         pip install cython
     - name: Building wheel
       run: |
-        make wheel_manylinux
+        make -j3 wheel_manylinux
     - name: Copy wheels in dist
       run: cp wheelhouse*/fastrlock*.whl dist/
     - name: Push build artifacts to PyPI
