@@ -5,6 +5,13 @@ on: push
 jobs:
   build:
 
+    strategy:
+      # Allows for matrix sub-jobs to fail without canceling the rest
+      fail-fast: false
+
+      matrix:
+        env: [{TARGET: wheel_manylinux2010_x86_64}, {TARGET: wheel_manylinux2010_i686}, {TARGET: wheel_manylinux2014_aarch64}]
+
     runs-on: ubuntu-latest
 
     steps:
@@ -21,7 +28,7 @@ jobs:
 
     - name: Building wheel
       run: |
-        make -j3 wheel_manylinux
+        make ${{ matrix.env.TARGET }}
 
     - name: Copy wheels in dist
       run: cp wheelhouse*/fastrlock*.whl dist/
@@ -29,7 +36,7 @@ jobs:
     - name: Archive Wheels
       uses: actions/upload-artifact@v2
       with:
-        name: wheels
+        name: ${{ matrix.env.TARGET }}
         path: dist/*manylinux*.whl
         if-no-files-found: ignore
 
