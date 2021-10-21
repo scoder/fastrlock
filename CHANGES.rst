@@ -2,11 +2,13 @@
 fastrlock changelog
 ===================
 
-Upcoming release
+0.7 (2021-10-21)
 ================
 
 * Adapted for unsigned thread IDs, as used by Py3.7+.
   (original patch by Guilherme Dantas)
+
+* Build with Cython 0.29.24 to support Py3.10 and later.
 
 
 0.6 (2021-03-21)
