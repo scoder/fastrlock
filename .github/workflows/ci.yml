@@ -1,6 +1,8 @@
 name: Build & Publish wheel
 
-on: push
+on:
+  push:
+  create:
 
 jobs:
   build:
