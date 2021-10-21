@@ -94,6 +94,7 @@ if __name__ == '__main__':
         context_manager,
         ]
 
+    import fastrlock
     import sys
     from timeit import Timer
     from functools import partial
@@ -101,7 +102,7 @@ if __name__ == '__main__':
     repeat_count = 100000
     repeat_count_t = 1000
 
-    rlock, flock = ('threading.RLock', RLock()), ('FastRLock', FLock())
+    rlock, flock = ('threading.RLock', RLock(), "%d.%d.%d" % sys.version_info[:3]), ('FastRLock', FLock(), fastrlock.__version__)
     locks = []
     args = sys.argv[1:]
     if 'rlock' in args:
@@ -114,8 +115,9 @@ if __name__ == '__main__':
         repeat_count = max(10, repeat_count // 100)
         repeat_count_t = max(5, repeat_count_t // 10)
 
-    for name, lock in locks:
-        print('Testing %s' % name)
+    for name, lock, version in locks:
+        print('Testing %s (%s)' % (name, version))
+
         print("sequential (x%d):" % repeat_count)
         for function in functions:
             timer = Timer(partial(function, lock))
