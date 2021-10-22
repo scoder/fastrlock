@@ -1,11 +1,11 @@
-PYTHON?=python
-PYTHON3?=python3
+PYTHON2?=python
+PYTHON?=python3
 SETUPFLAGS=
 PACKAGENAME=fastrlock
 VERSION=$(shell python -c 'import re; f=open("fastrlock/__init__.py"); print(re.search("__version__\s*=\s*[\x27\x22](.+)[\x27\x22]", f.read()).group(1)); f.close()')
 
 PYTHON_WITH_CYTHON=$(shell $(PYTHON)  -c 'import Cython.Compiler' >/dev/null 2>/dev/null && echo " --with-cython" || true)
-PY3_WITH_CYTHON=$(shell $(PYTHON3) -c 'import Cython.Compiler' >/dev/null 2>/dev/null && echo " --with-cython" || true)
+PY2_WITH_CYTHON=$(shell $(PYTHON2) -c 'import Cython.Compiler' >/dev/null 2>/dev/null && echo " --with-cython" || true)
 
 MANYLINUX_IMAGES= \
 	manylinux2010_x86_64 \
