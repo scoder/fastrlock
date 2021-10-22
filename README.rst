@@ -71,7 +71,7 @@ timings instead of 100000x for the single threaded case.
 
 ::
 
-    Testing threading.RLock
+    Testing threading.RLock (2.7)
 
     sequential (x100000):
     lock_unlock              : 1.408 sec
@@ -100,39 +100,45 @@ timings instead of 100000x for the single threaded case.
     lock_unlock_nonblocking  : 0.916 sec
 
 
-How does it compare to Python 3.2 and later?
+How does it compare to Python 3.7 and later?
 --------------------------------------------
 
-Here is the same benchmark run with Py3.2::
+The results here are more mixed.  Depending on the optimisation of the CPython
+installation, it can be faster, about the same speed, or somewhat slower.
+In any case, the direct Cython interface is always faster than going through
+the Python API, because it avoids the Python call overhead and executes
+a C call instead.
 
-    Testing threading.RLock
+::
 
-    sequential (x100000):
-    lock_unlock              : 0.134 sec
-    reentrant_lock_unlock    : 0.120 sec
-    mixed_lock_unlock        : 0.151 sec
-    lock_unlock_nonblocking  : 0.177 sec
+    Testing threading.RLock (3.9.7)
 
-    threaded 10T (x1000):
-    lock_unlock              : 0.885 sec
-    reentrant_lock_unlock    : 0.972 sec
-    mixed_lock_unlock        : 0.883 sec
-    lock_unlock_nonblocking  : 0.911 sec
+    sequential (x1000):
+    lock_unlock              :      1.00 msec
+    reentrant_lock_unlock    :      0.80 msec
+    mixed_lock_unlock        :      0.88 msec
+    lock_unlock_nonblocking  :      1.23 msec
+    context_manager          :      5.29 msec
 
-    Testing FastRLock
+    threaded 10T (x100):
+    lock_unlock              :     65.54 msec
+    reentrant_lock_unlock    :     65.49 msec
+    mixed_lock_unlock        :     86.61 msec
+    lock_unlock_nonblocking  :     66.30 msec
+    context_manager          :     84.27 msec
 
-    sequential (x100000):
-    lock_unlock              : 0.093 sec
-    reentrant_lock_unlock    : 0.093 sec
-    mixed_lock_unlock        : 0.104 sec
-    lock_unlock_nonblocking  : 0.112 sec
+    Testing FastRLock (0.8)
 
-    threaded 10T (x1000):
-    lock_unlock              : 0.943 sec
-    reentrant_lock_unlock    : 0.871 sec
-    mixed_lock_unlock        : 0.920 sec
-    lock_unlock_nonblocking  : 0.908 sec
+    sequential (x1000):
+    lock_unlock              :      0.60 msec
+    reentrant_lock_unlock    :      0.53 msec
+    mixed_lock_unlock        :      0.51 msec
+    lock_unlock_nonblocking  :      0.54 msec
+    context_manager          :      3.56 msec
 
-So, in the single-threaded case, the C implementation in Py3.2 is only
-about 20-50% slower than the Cython implementation here, whereas it is
-more or less as fast in the congested case.
+    threaded 10T (x100):
+    lock_unlock              :     63.64 msec
+    reentrant_lock_unlock    :     69.93 msec
+    mixed_lock_unlock        :     64.66 msec
+    lock_unlock_nonblocking  :     69.28 msec
+    context_manager          :     80.07 msec

@@ -2,6 +2,13 @@
 fastrlock changelog
 ===================
 
+0.8 (2021-10-22)
+================
+
+* Rebuild with Cython 3.0.0a9 to improve the performance in recent
+  Python 3.x versions.
+
+
 0.7 (2021-10-21)
 ================
 
