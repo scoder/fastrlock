@@ -8,9 +8,9 @@ def suite():
     tests = []
     for filename in os.listdir(test_dir):
         if filename.endswith('.py') and not filename.startswith('_'):
-            tests.append(unittest.findTestCases('tests.'+ filename[:-3]))
+            tests.append(unittest.defaultTestLoader.loadTestsFromName(__name__ + '.' + filename[:-3]))
 
-    suite = unittest.TestSuite(tests)
+    suite = unittest.TestSuite(tests) if len(tests) != 1 else tests[0]
     suite.addTest(doctest.DocFileSuite('../../README.rst'))
     return suite
 
