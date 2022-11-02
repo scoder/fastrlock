@@ -77,6 +77,13 @@ jobs:
           - "3.11"
           # - "3.12-dev"
 
+        exclude:
+          # fails due to lack of a compatible compiler
+          - os: windows-latest
+            python-version: 2.7
+          - os: windows-latest
+            python-version: 3.5
+
     runs-on: ${{ matrix.os }}
 
     steps:
