@@ -259,7 +259,7 @@ def main():
 
         finally:
             if basepath:
-                files = glob.glob(basepath)
+                files = glob.glob(basepath + ".*")  # .c, .so / .pyd
                 if len(files) > 3:
                     print("Found too many artefacts, not deleting temporary files")
                 else:
