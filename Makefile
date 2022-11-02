@@ -7,9 +7,10 @@ VERSION=$(shell python -c 'import re; f=open("fastrlock/__init__.py"); print(re.
 PYTHON_WITH_CYTHON=$(shell $(PYTHON)  -c 'import Cython.Compiler' >/dev/null 2>/dev/null && echo " --with-cython" || true)
 PY2_WITH_CYTHON=$(shell $(PYTHON2) -c 'import Cython.Compiler' >/dev/null 2>/dev/null && echo " --with-cython" || true)
 
+# manylinux1 images still include Python 2.7
 MANYLINUX_IMAGES= \
-	manylinux2010_x86_64 \
-	manylinux2010_i686 \
+	manylinux1_x86_64 \
+	manylinux1_i686 \
     manylinux_2_24_x86_64 \
     manylinux_2_24_i686 \
     manylinux_2_24_aarch64 \
