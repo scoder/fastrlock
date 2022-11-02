@@ -5,7 +5,7 @@ on:
   create:
 
 jobs:
-  build:
+  Linux:
 
     strategy:
       # Allows for matrix sub-jobs to fail without canceling the rest
@@ -26,7 +26,7 @@ jobs:
 
     - name: Install Dependency
       run: |
-        pip install --pre "Cython>=3.0.0a9"
+        pip install --pre "Cython>=3.0.0a11"
 
     - name: Building wheel
       run: |
@@ -46,4 +46,54 @@ jobs:
       with:
         name: ${{ matrix.env.TARGET }}
         path: dist/*manylinux*.whl
+        if-no-files-found: ignore
+
+  other:
+
+    strategy:
+      # Allows for matrix sub-jobs to fail without canceling the rest
+      fail-fast: false
+
+      matrix:
+        os: [macos-latest, windows-latest]
+        python-version:
+          - "2.7"
+          - "3.5"
+          - "3.6"
+          - "3.7"
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+          - "3.12-dev"
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Dependency
+      run: |
+        pip install --pre "Cython>=3.0.0a11"
+
+    - name: Building wheel
+      run: |
+        python setup.py bdist_wheel
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: dist/*.whl
+
+    - name: Archive Wheels
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ matrix.os }}-wheels
+        path: dist/*.whl
         if-no-files-found: ignore
