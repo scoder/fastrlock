@@ -12,7 +12,17 @@ jobs:
       fail-fast: false
 
       matrix:
-        env: [{TARGET: wheel_manylinux2010_x86_64}, {TARGET: wheel_manylinux2010_i686}, {TARGET: wheel_manylinux2014_aarch64}]
+        image:
+          - manylinux2010_x86_64
+          - manylinux2010_i686
+          - manylinux_2_24_x86_64
+          - manylinux_2_24_i686
+          - manylinux_2_24_aarch64
+          - musllinux_1_1_x86_64
+          - musllinux_1_1_aarch64
+          #- manylinux_2_24_ppc64le
+          #- manylinux_2_24_ppc64le
+          #- manylinux_2_24_s390x
 
     runs-on: ubuntu-latest
 
@@ -30,7 +40,7 @@ jobs:
 
     - name: Building wheel
       run: |
-        make sdist ${{ matrix.env.TARGET }}
+        make sdist wheel_${{ matrix.image }}
 
     - name: Copy wheels in dist
       run: cp wheelhouse*/fastrlock*.whl dist/
@@ -44,7 +54,7 @@ jobs:
     - name: Archive Wheels
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.env.TARGET }}
+        name: ${{ matrix.image }}
         path: dist/*manylinux*.whl
         if-no-files-found: ignore
 
