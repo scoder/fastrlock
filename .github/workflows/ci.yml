@@ -80,6 +80,7 @@ jobs:
     - name: Install Dependency
       run: |
         pip install --pre "Cython>=3.0.0a11"
+        pip install wheel
 
     - name: Building wheel
       run: |
