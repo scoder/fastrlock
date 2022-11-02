@@ -10,7 +10,11 @@ PY2_WITH_CYTHON=$(shell $(PYTHON2) -c 'import Cython.Compiler' >/dev/null 2>/dev
 MANYLINUX_IMAGES= \
 	manylinux2010_x86_64 \
 	manylinux2010_i686 \
-	manylinux2014_aarch64
+    manylinux_2_24_x86_64 \
+    manylinux_2_24_i686 \
+    manylinux_2_24_aarch64 \
+    musllinux_1_1_x86_64 \
+    musllinux_1_1_aarch64
 
 .PHONY: all version inplace sdist build clean wheel_manylinux wheel
 
@@ -40,12 +44,12 @@ $(addprefix wheel_,$(filter-out %_x86_64, $(filter-out %_i686, $(MANYLINUX_IMAGE
 
 wheel_%: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 	echo "Building wheels for $(PACKAGENAME) $(VERSION)"
-	mkdir -p wheelhouse$(subst wheel_manylinux,,$@)
+	mkdir -p wheelhouse$(subst wheel_,,$@)
 	time docker run --rm -t \
 		-v $(shell pwd):/io \
 		-e CFLAGS="-O3 -g1 -mtune=generic -pipe -fPIC" \
 		-e LDFLAGS="$(LDFLAGS) -fPIC" \
-		-e WHEELHOUSE=wheelhouse$(subst wheel_manylinux,,$@) \
+		-e WHEELHOUSE=wheelhouse$(subst wheel_,,$@) \
 		quay.io/pypa/$(subst wheel_,,$@) \
 		bash -c '\
 			rm -fr $(PACKAGENAME)-$(VERSION)/; \
