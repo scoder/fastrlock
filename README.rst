@@ -66,38 +66,57 @@ Here are some timings for Python 2.7 for the following scenarios:
 All four are benchmarked for the single threaded case and the multi threaded case
 with 10 threads.  I also tested it with 20 threads only to see that it then takes
 about twice the time for both versions.  Note also that the congested case is
-substantially slower for both locks, so I only looped 1000x here to get useful
+substantially slower for both locks and the benchmark includes the thread
+creation time, so I only looped 1000x here to get useful
 timings instead of 100000x for the single threaded case.
 
 ::
 
-    Testing threading.RLock (2.7)
+    Testing _RLock (2.7.18)
 
     sequential (x100000):
-    lock_unlock              : 1.408 sec
-    reentrant_lock_unlock    : 1.089 sec
-    mixed_lock_unlock        : 1.212 sec
-    lock_unlock_nonblocking  : 1.415 sec
+    lock_unlock              :    853.55 msec
+    reentrant_lock_unlock    :    684.52 msec
+    mixed_lock_unlock        :    758.27 msec
+    lock_unlock_nonblocking  :    860.40 msec
+    context_manager          :   2876.00 msec
 
     threaded 10T (x1000):
-    lock_unlock              : 1.188 sec
-    reentrant_lock_unlock    : 1.039 sec
-    mixed_lock_unlock        : 1.068 sec
-    lock_unlock_nonblocking  : 1.199 sec
+    lock_unlock              :   2210.69 msec
+    reentrant_lock_unlock    :   1864.38 msec
+    mixed_lock_unlock        :   1963.10 msec
+    lock_unlock_nonblocking  :   3709.91 msec
+    context_manager          :   2640.32 msec
 
-    Testing FastRLock
+    Testing FastRLock (0.8.1)
 
     sequential (x100000):
-    lock_unlock              : 0.122 sec
-    reentrant_lock_unlock    : 0.124 sec
-    mixed_lock_unlock        : 0.137 sec
-    lock_unlock_nonblocking  : 0.156 sec
+    lock_unlock              :    139.76 msec
+    reentrant_lock_unlock    :    137.56 msec
+    mixed_lock_unlock        :    140.75 msec
+    lock_unlock_nonblocking  :    164.64 msec
+    context_manager          :    593.06 msec
 
     threaded 10T (x1000):
-    lock_unlock              : 0.911 sec
-    reentrant_lock_unlock    : 0.938 sec
-    mixed_lock_unlock        : 0.953 sec
-    lock_unlock_nonblocking  : 0.916 sec
+    lock_unlock              :   1621.13 msec
+    reentrant_lock_unlock    :   1807.09 msec
+    mixed_lock_unlock        :   1834.21 msec
+    lock_unlock_nonblocking  :   1642.06 msec
+    context_manager          :   1730.29 msec
+
+    Testing Cython interface of FastRLock (0.8.1)
+
+    sequential (x100000):
+    lock_unlock              :     19.14 msec
+    reentrant_lock_unlock    :     19.12 msec
+    mixed_lock_unlock        :     16.81 msec
+    lock_unlock_nonblocking  :     14.49 msec
+
+    threaded 10T (x1000):
+    lock_unlock              :   1511.85 msec
+    reentrant_lock_unlock    :   1541.96 msec
+    mixed_lock_unlock        :   1585.70 msec
+    lock_unlock_nonblocking  :   1585.35 msec
 
 
 How does it compare to Python 3.7 and later?
@@ -111,34 +130,48 @@ a C call instead.
 
 ::
 
-    Testing threading.RLock (3.9.7)
+    Testing RLock (3.10.1)
 
-    sequential (x1000):
-    lock_unlock              :      1.00 msec
-    reentrant_lock_unlock    :      0.80 msec
-    mixed_lock_unlock        :      0.88 msec
-    lock_unlock_nonblocking  :      1.23 msec
-    context_manager          :      5.29 msec
+    sequential (x100000):
+    lock_unlock              :    138.36 msec
+    reentrant_lock_unlock    :     95.35 msec
+    mixed_lock_unlock        :    102.05 msec
+    lock_unlock_nonblocking  :    131.44 msec
+    context_manager          :    616.83 msec
 
-    threaded 10T (x100):
-    lock_unlock              :     65.54 msec
-    reentrant_lock_unlock    :     65.49 msec
-    mixed_lock_unlock        :     86.61 msec
-    lock_unlock_nonblocking  :     66.30 msec
-    context_manager          :     84.27 msec
+    threaded 10T (x1000):
+    lock_unlock              :   1386.60 msec
+    reentrant_lock_unlock    :   1207.75 msec
+    mixed_lock_unlock        :   1319.62 msec
+    lock_unlock_nonblocking  :   1325.07 msec
+    context_manager          :   1357.93 msec
 
-    Testing FastRLock (0.8)
+    Testing FastRLock (0.8.1)
 
-    sequential (x1000):
-    lock_unlock              :      0.60 msec
-    reentrant_lock_unlock    :      0.53 msec
-    mixed_lock_unlock        :      0.51 msec
-    lock_unlock_nonblocking  :      0.54 msec
-    context_manager          :      3.56 msec
+    sequential (x100000):
+    lock_unlock              :     77.47 msec
+    reentrant_lock_unlock    :     64.14 msec
+    mixed_lock_unlock        :     73.51 msec
+    lock_unlock_nonblocking  :     70.31 msec
+    context_manager          :    393.34 msec
 
-    threaded 10T (x100):
-    lock_unlock              :     63.64 msec
-    reentrant_lock_unlock    :     69.93 msec
-    mixed_lock_unlock        :     64.66 msec
-    lock_unlock_nonblocking  :     69.28 msec
-    context_manager          :     80.07 msec
+    threaded 10T (x1000):
+    lock_unlock              :   1214.13 msec
+    reentrant_lock_unlock    :   1171.75 msec
+    mixed_lock_unlock        :   1184.33 msec
+    lock_unlock_nonblocking  :   1207.42 msec
+    context_manager          :   1232.20 msec
+
+    Testing Cython interface of FastRLock (0.8.1)
+
+    sequential (x100000):
+    lock_unlock              :     18.70 msec
+    reentrant_lock_unlock    :     15.88 msec
+    mixed_lock_unlock        :     14.96 msec
+    lock_unlock_nonblocking  :     13.47 msec
+
+    threaded 10T (x1000):
+    lock_unlock              :   1236.21 msec
+    reentrant_lock_unlock    :   1245.77 msec
+    mixed_lock_unlock        :   1194.25 msec
+    lock_unlock_nonblocking  :   1206.96 msec
