@@ -45,12 +45,12 @@ $(addprefix wheel_,$(filter-out %_x86_64, $(filter-out %_i686, $(MANYLINUX_IMAGE
 
 wheel_%: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 	echo "Building wheels for $(PACKAGENAME) $(VERSION)"
-	mkdir -p wheelhouse$(subst wheel_,,$@)
+	mkdir -p wheelhouse_$(subst wheel_,,$@)
 	time docker run --rm -t \
 		-v $(shell pwd):/io \
 		-e CFLAGS="-O3 -g1 -mtune=generic -pipe -fPIC" \
 		-e LDFLAGS="$(LDFLAGS) -fPIC" \
-		-e WHEELHOUSE=wheelhouse$(subst wheel_,,$@) \
+		-e WHEELHOUSE=wheelhouse_$(subst wheel_,,$@) \
 		quay.io/pypa/$(subst wheel_,,$@) \
 		bash -c '\
 			rm -fr $(PACKAGENAME)-$(VERSION)/; \
