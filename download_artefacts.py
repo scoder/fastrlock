@@ -1,9 +1,7 @@
 #!/usr/bin/python3
 
-import itertools
 import json
 import logging
-import re
 import shutil
 import datetime
 
