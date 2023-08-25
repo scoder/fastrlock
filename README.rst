@@ -4,7 +4,7 @@ FastRLock
 This is a C-level implementation of a fast, re-entrant, optimistic lock for CPython.
 It is a drop-in replacement for
 `threading.RLock <https://docs.python.org/3/library/threading.html#threading.RLock>`_.
-FastRLock is implemented in `Cython <http://cython.org>`_ and also provides a C-API
+FastRLock is implemented in `Cython <https://cython.org>`_ and also provides a C-API
 for direct use from Cython code via ``from fastrlock cimport rlock``.
 
 Under normal conditions, it is about 10x faster than threading.RLock in Python 2.7
