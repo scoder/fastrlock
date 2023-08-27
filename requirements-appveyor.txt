@@ -3,4 +3,5 @@ pytest
 coverage
 Cython==3.0.2
 codecov
+setuptools
 wheel
