@@ -14,6 +14,8 @@ MANYLINUX_IMAGES= \
     manylinux_2_24_x86_64 \
     manylinux_2_24_i686 \
     manylinux_2_24_aarch64 \
+    manylinux_2_28_x86_64 \
+    manylinux_2_28_aarch64 \
     musllinux_1_1_x86_64 \
     musllinux_1_1_aarch64
 
