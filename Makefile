@@ -8,6 +8,7 @@ PYTHON_WITH_CYTHON=$(shell $(PYTHON)  -c 'import Cython.Compiler' >/dev/null 2>/
 PY2_WITH_CYTHON=$(shell $(PYTHON2) -c 'import Cython.Compiler' >/dev/null 2>/dev/null && echo " --with-cython" || true)
 
 # manylinux1 images still include Python 2.7
+MANYLINUX_PYTHON?=cp*
 MANYLINUX_IMAGES= \
 	manylinux1_x86_64 \
 	manylinux1_i686 \
@@ -57,7 +58,7 @@ wheel_%: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 		bash -c '\
 			rm -fr $(PACKAGENAME)-$(VERSION)/; \
 			tar zxf /io/$< && cd $(PACKAGENAME)-$(VERSION)/ || exit 1; \
-			for PYBIN in /opt/python/cp*/bin; do \
+			for PYBIN in /opt/python/$(MANYLINUX_PYTHON)/bin; do \
 				PYVER="$$($$PYBIN/python -V)"; \
 				PROFDIR="prof-$${PYVER// /_}"; \
 				echo $$PYVER; \
