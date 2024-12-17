@@ -50,38 +50,38 @@ jobs:
           - musllinux_1_1_x86_64
           #- manylinux_2_24_ppc64le
           #- manylinux_2_24_s390x
-        pyversion: ["cp*"]
+        pyversion: ["cp"]  # all CPython versions
 
         include:
           - image: manylinux_2_24_aarch64
-            pyversion: "cp37*"
+            pyversion: "cp37"
           - image: manylinux_2_24_aarch64
-            pyversion: "cp38*"
+            pyversion: "cp38"
           - image: manylinux_2_24_aarch64
-            pyversion: "cp39*"
+            pyversion: "cp39"
           - image: manylinux_2_24_aarch64
-            pyversion: "cp310*"
+            pyversion: "cp310"
           - image: manylinux_2_24_aarch64
-            pyversion: "cp311*"
+            pyversion: "cp311"
           - image: manylinux_2_28_aarch64
-            pyversion: "cp312*"
+            pyversion: "cp312"
           - image: manylinux_2_28_aarch64
-            pyversion: "cp313*"
+            pyversion: "cp313"
 
           - image: musllinux_1_1_aarch64
-            pyversion: "cp37*"
+            pyversion: "cp37"
           - image: musllinux_1_1_aarch64
-            pyversion: "cp38*"
+            pyversion: "cp38"
           - image: musllinux_1_1_aarch64
-            pyversion: "cp39*"
+            pyversion: "cp39"
           - image: musllinux_1_1_aarch64
-            pyversion: "cp310*"
+            pyversion: "cp310"
           - image: musllinux_1_1_aarch64
-            pyversion: "cp311*"
+            pyversion: "cp311"
           - image: musllinux_1_1_aarch64
-            pyversion: "cp312*"
+            pyversion: "cp312"
           - image: musllinux_1_1_aarch64
-            pyversion: "cp313*"
+            pyversion: "cp313"
 
     runs-on: ubuntu-latest
 
@@ -99,7 +99,7 @@ jobs:
 
     - name: Building wheel
       run: |
-        make MANYLINUX_PYTHON="${{ matrix.pyversion }}" sdist wheel_${{ matrix.image }}
+        make MANYLINUX_PYTHON="${{ matrix.pyversion }}*" sdist wheel_${{ matrix.image }}
 
     - name: Copy wheels in dist
       run: cp -v wheelhouse*/fastrlock*.whl dist/
@@ -113,7 +113,7 @@ jobs:
     - name: Archive Wheels
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.image }}
+        name: ${{ matrix.image }}-${{ matrix.pyversion }}
         path: dist/  # manylinux / musllinux
         if-no-files-found: ignore
 
