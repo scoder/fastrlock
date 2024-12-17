@@ -2,6 +2,12 @@
 fastrlock changelog
 ===================
 
+0.8.3 (2024-12-17)
+==================
+
+* Rebuilt with Cython 3.0.11 to add Python 3.13 support.
+
+
 0.8.2 (2023-08-27)
 ==================
 
