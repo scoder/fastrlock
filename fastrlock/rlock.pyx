@@ -57,7 +57,7 @@ cdef class FastRLock:
 
 
 cdef inline bint _lock_rlock(_LockStatus *lock, pythread_t current_thread,
-                             bint blocking) nogil:
+                             bint blocking) nogil except -1:
     # Note that this function *must* hold the GIL when being called.
     # We just use 'nogil' in the signature to make sure that no Python
     # code execution slips in that might free the GIL
@@ -66,12 +66,12 @@ cdef inline bint _lock_rlock(_LockStatus *lock, pythread_t current_thread,
         # locked! - by myself?
         if lock.owner == current_thread:
             lock.entry_count += 1
-            return 1
+            return True
     elif not lock.pending_requests:
         # not locked, not requested - go!
         lock.owner = current_thread
         lock.entry_count = 1
-        return 1
+        return True
     # need to get the real lock
     return _acquire_lock(lock, current_thread, blocking)
 
@@ -89,7 +89,7 @@ cdef create_fastrlock():
 cdef bint lock_fastrlock(rlock, long current_thread, bint blocking) except -1:
     """
     Public C level entry function for locking a FastRlock instance.
-    
+
     The 'current_thread' argument is deprecated and ignored.  Pass -1 for backwards compatibility.
     """
     # Note: 'current_thread' used to be set to -1 or the current thread ID, but -1 is signed while "pythread_t" isn't.
