@@ -88,7 +88,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python 3.12
+    - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: "3.12"
@@ -126,7 +126,6 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest]
         python-version:
-          - "2.7"
           - "3.8"
           - "3.9"
           - "3.10"
@@ -134,11 +133,6 @@ jobs:
           - "3.12"
           - "3.13"
           - "3.14-dev"
-
-        exclude:
-          # fails due to lack of a compatible compiler
-          - os: windows-latest
-            python-version: 2.7
 
     runs-on: ${{ matrix.os }}
 
@@ -150,7 +144,6 @@ jobs:
 
     - name: Set up Python
       uses: actions/setup-python@v5
-      if: startsWith(matrix.python-version, '3.')
       with:
         python-version: ${{ matrix.python-version }}
 

@@ -94,14 +94,13 @@ setup(
         'Intended Audience :: Information Technology',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Cython',
-        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
         'Operating System :: OS Independent',
         'Topic :: Software Development',
     ],
 
     packages=[PKGNAME],
-    package_data={PKGNAME: ['*.pxd', '*.pxi']},
+    package_data={PKGNAME: ['*.pyx', '*.pxd', '*.pxi']},
     ext_modules=ext_modules,
     zip_safe=False,
 

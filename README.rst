@@ -57,7 +57,7 @@ code slips in accidentally.
 How fast is it?
 ---------------
 
-Here are some timings for Python 2.7 for the following scenarios:
+Here are some timings for the following scenarios:
 
 1) five acquire-release cycles ('lock_unlock')
 2) five acquire calls followed by five release calls (nested locking, 'reentrant_lock_unlock')
@@ -71,59 +71,7 @@ substantially slower for both locks and the benchmark includes the thread
 creation time, so I only looped 1000x here to get useful
 timings instead of 100000x for the single threaded case.
 
-::
-
-    Testing _RLock (2.7.18)
-
-    sequential (x100000):
-    lock_unlock              :    853.55 msec
-    reentrant_lock_unlock    :    684.52 msec
-    mixed_lock_unlock        :    758.27 msec
-    lock_unlock_nonblocking  :    860.40 msec
-    context_manager          :   2876.00 msec
-
-    threaded 10T (x1000):
-    lock_unlock              :   2210.69 msec
-    reentrant_lock_unlock    :   1864.38 msec
-    mixed_lock_unlock        :   1963.10 msec
-    lock_unlock_nonblocking  :   3709.91 msec
-    context_manager          :   2640.32 msec
-
-    Testing FastRLock (0.8.1)
-
-    sequential (x100000):
-    lock_unlock              :    139.76 msec
-    reentrant_lock_unlock    :    137.56 msec
-    mixed_lock_unlock        :    140.75 msec
-    lock_unlock_nonblocking  :    164.64 msec
-    context_manager          :    593.06 msec
-
-    threaded 10T (x1000):
-    lock_unlock              :   1621.13 msec
-    reentrant_lock_unlock    :   1807.09 msec
-    mixed_lock_unlock        :   1834.21 msec
-    lock_unlock_nonblocking  :   1642.06 msec
-    context_manager          :   1730.29 msec
-
-    Testing Cython interface of FastRLock (0.8.1)
-
-    sequential (x100000):
-    lock_unlock              :     19.14 msec
-    reentrant_lock_unlock    :     19.12 msec
-    mixed_lock_unlock        :     16.81 msec
-    lock_unlock_nonblocking  :     14.49 msec
-
-    threaded 10T (x1000):
-    lock_unlock              :   1511.85 msec
-    reentrant_lock_unlock    :   1541.96 msec
-    mixed_lock_unlock        :   1585.70 msec
-    lock_unlock_nonblocking  :   1585.35 msec
-
-
-How does it compare to Python 3.7 and later?
---------------------------------------------
-
-The results here are more mixed.  Depending on the optimisation of the CPython
+The results here are mixed.  Depending on the optimisation of the CPython
 installation, it can be faster, about the same speed, or somewhat slower.
 In any case, the direct Cython interface is always faster than going through
 the Python API, because it avoids the Python call overhead and executes
