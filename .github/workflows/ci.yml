@@ -114,7 +114,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.image }}
-        path: dist/*-m*linux*.whl  # manylinux / musllinux
+        path: dist/  # manylinux / musllinux
         if-no-files-found: ignore
 
   other:
@@ -172,6 +172,6 @@ jobs:
     - name: Archive Wheels
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.os }}-wheels
+        name: ${{ matrix.os }}-${{ matrix.python-version }}-wheels
         path: dist/*.whl
         if-no-files-found: ignore
