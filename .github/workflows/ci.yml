@@ -60,7 +60,6 @@ jobs:
           - musllinux_1_2_aarch64
           #- manylinux_2_24_ppc64le
           #- manylinux_2_24_s390x
-        pyversion: ["cp"]  # all CPython versions
 
     runs-on: ${{ contains(matrix.image, '_aarch64') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
 
@@ -78,7 +77,7 @@ jobs:
 
     - name: Building wheel
       run: |
-        make MANYLINUX_PYTHON="${{ matrix.pyversion }}*" sdist wheel_${{ matrix.image }}
+        make sdist wheel_${{ matrix.image }}
 
     - name: Copy wheels in dist
       run: cp -v wheelhouse*/fastrlock*.whl dist/
@@ -86,7 +85,7 @@ jobs:
     - name: Archive Wheels
       uses: actions/upload-artifact@v7
       with:
-        name: wheels-${{ matrix.image }}-${{ matrix.pyversion }}
+        name: wheels-${{ matrix.image }}
         path: dist/  # manylinux / musllinux
         if-no-files-found: ignore
 
