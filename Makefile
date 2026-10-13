@@ -51,7 +51,7 @@ wheel_%: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 	mkdir -p wheelhouse_$(subst wheel_,,$@)
 	time docker run --rm -t \
 		-v $(shell pwd):/io \
-		-e CFLAGS="-O3 -g1 -mtune=generic -pipe -fPIC" \
+		-e CFLAGS="-O3 -g1 -mtune=generic -pipe -fPIC -std=c99" \
 		-e LDFLAGS="$(LDFLAGS) -fPIC" \
 		-e WHEELHOUSE=wheelhouse_$(subst wheel_,,$@) \
 		quay.io/pypa/$(subst wheel_,,$@) \
