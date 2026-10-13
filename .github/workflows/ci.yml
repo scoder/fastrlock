@@ -3,6 +3,12 @@ name: Build & Publish wheel
 on:
   push:
   create:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}-${{ github.ref_type }}
+  cancel-in-progress: true
 
 jobs:
   sdist:
