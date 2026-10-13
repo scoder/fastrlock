@@ -44,14 +44,19 @@ qemu-user-static:
 	docker run --rm --privileged hypriot/qemu-register
 
 wheel_manylinux: sdist $(addprefix wheel_,$(MANYLINUX_IMAGES))
+
+ifeq ($(strip $(shell uname -m)),x86_64)
 $(addprefix wheel_,$(filter-out %_x86_64, $(filter-out %_i686, $(MANYLINUX_IMAGES)))): qemu-user-static
+else ifeq ($(strip $(shell uname -m)),aarch64)
+$(addprefix wheel_,$(filter-out %_aarch64, $(MANYLINUX_IMAGES))): qemu-user-static
+endif
 
 wheel_%: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 	echo "Building wheels for $(PACKAGENAME) $(VERSION)"
 	mkdir -p wheelhouse_$(subst wheel_,,$@)
 	time docker run --rm -t \
 		-v $(shell pwd):/io \
-		-e CFLAGS="-O3 -g1 -mtune=generic -pipe -fPIC" \
+		-e CFLAGS="-O3 -g1 -mtune=generic -pipe -fPIC -std=c99" \
 		-e LDFLAGS="$(LDFLAGS) -fPIC" \
 		-e WHEELHOUSE=wheelhouse_$(subst wheel_,,$@) \
 		quay.io/pypa/$(subst wheel_,,$@) \
