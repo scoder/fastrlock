@@ -67,9 +67,10 @@ Here are some timings for the following scenarios:
 2) five acquire calls followed by five release calls (nested locking, 'reentrant_lock_unlock')
 3) a mixed and partly nested sequence of acquire and release calls ('mixed_lock_unlock')
 4) five acquire-release cycles that do not block ('lock_unlock_nonblocking')
+5) nested with-statement usage through a context manager
 
-All four are benchmarked for the single threaded case and the multi threaded case
-with 10 threads.  I also tested it with 20 threads only to see that it then takes
+All five are benchmarked for the single threaded case and the congested multi threaded
+case with 10 threads.  I also tested it with 20 threads only to see that it then takes
 about twice the time for both versions.  Note also that the congested case is
 substantially slower for both locks and the benchmark includes the thread
 creation time, so I only looped 100x here to get useful
