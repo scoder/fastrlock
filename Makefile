@@ -2,7 +2,7 @@ PYTHON?=python3
 SETUPFLAGS=
 PACKAGENAME=fastrlock
 
-VERSION ::= $(shell python -c 'import re; f=open("fastrlock/__init__.py"); print(re.search("__version__\\s*=\\s*[\x27\x22](.+)[\x27\x22]", f.read()).group(1)); f.close()')
+VERSION ::= $(shell $(PYTHON) -c 'import re; f=open("fastrlock/__init__.py"); print(re.search("__version__\\s*=\\s*[\x27\x22](.+)[\x27\x22]", f.read()).group(1)); f.close()')
 
 ARCH_NAME ::= $(strip $(shell uname -m))
 ifeq ($(ARCH_NAME),x86_64)
