@@ -1,16 +1,9 @@
 PYTHON?=python3
 SETUPFLAGS=
 PACKAGENAME=fastrlock
-
 VERSION ::= $(shell $(PYTHON) -c 'import re; f=open("fastrlock/__init__.py"); print(re.search("__version__\\s*=\\s*[\x27\x22](.+)[\x27\x22]", f.read()).group(1)); f.close()')
 
 ARCH_NAME ::= $(strip $(shell uname -m))
-ifeq ($(ARCH_NAME),x86_64)
-CFLAGS ::= -O3 -g1 -mtune=generic
-else
-CFLAGS ::= -O3 -g1
-endif
-
 PYTHON_WITH_CYTHON ::= $(shell $(PYTHON)  -c 'import Cython.Compiler' >/dev/null 2>/dev/null && echo " --with-cython" || true)
 
 # manylinux1 images still include Python 2.7
@@ -65,7 +58,7 @@ wheel_%: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 	mkdir -p wheelhouse_$(subst wheel_,,$@)
 	time docker run --rm -t \
 		-v $(shell pwd):/io \
-		-e CFLAGS="$(CFLAGS) -fPIC -pipe -std=c99" \
+		-e CFLAGS="-O3 -g1 -fPIC -pipe -std=c99" \
 		-e LDFLAGS="$(LDFLAGS) -fPIC" \
 		-e WHEELHOUSE=wheelhouse_$(subst wheel_,,$@) \
 		quay.io/pypa/$(subst wheel_,,$@) \
