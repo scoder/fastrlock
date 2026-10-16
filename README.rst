@@ -54,6 +54,9 @@ switch which hands over the GIL to another thread and thus breaks atomicity.
 Therefore, the code misuses Cython's 'nogil' annotation to make sure that no Python
 code slips in accidentally.
 
+The smart reliance on the GIL is also the reason why freethreading Python is not
+supported.
+
 
 How fast is it?
 ---------------
