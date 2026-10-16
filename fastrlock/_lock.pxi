@@ -29,7 +29,7 @@ cdef struct _LockStatus:
 
 
 cdef bint _acquire_lock(_LockStatus *lock, long current_thread,
-                        bint blocking) nogil except -1:
+                        bint blocking) except -1 nogil:
     # Note that this function *must* hold the GIL when being called.
     # We just use 'nogil' in the signature to make sure that no Python
     # code execution slips in that might free the GIL
@@ -62,7 +62,7 @@ cdef bint _acquire_lock(_LockStatus *lock, long current_thread,
     return True
 
 
-cdef inline void _unlock_lock(_LockStatus *lock) nogil noexcept:
+cdef inline void _unlock_lock(_LockStatus *lock) noexcept nogil:
     # Note that this function *must* hold the GIL when being called.
     # We just use 'nogil' in the signature to make sure that no Python
     # code execution slips in that might free the GIL

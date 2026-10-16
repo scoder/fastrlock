@@ -57,7 +57,7 @@ cdef class FastRLock:
 
 
 cdef inline bint _lock_rlock(_LockStatus *lock, pythread_t current_thread,
-                             bint blocking) nogil except -1:
+                             bint blocking) except -1 nogil:
     # Note that this function *must* hold the GIL when being called.
     # We just use 'nogil' in the signature to make sure that no Python
     # code execution slips in that might free the GIL
