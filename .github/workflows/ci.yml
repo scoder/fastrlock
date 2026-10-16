@@ -48,14 +48,19 @@ jobs:
           - manylinux_2_24_x86_64
           - manylinux_2_28_x86_64
           - manylinux_2_24_aarch64
-          - manylinux_2_28_aarch64
+          - manylinux_2_39_aarch64
+          - manylinux_2_39_riscv64
+          - manylinux_2_35_armv7l
           - musllinux_1_1_x86_64
           - musllinux_1_1_aarch64
+          - musllinux_1_2_x86_64
           - musllinux_1_2_aarch64
+          - musllinux_1_2_armv7l
+          - musllinux_1_2_riscv64
           #- manylinux_2_24_ppc64le
           #- manylinux_2_24_s390x
 
-    runs-on: ${{ contains(matrix.image, '_aarch64') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+    runs-on: ${{ (contains(matrix.image, '_aarch64') || contains(matrix.image, '_armv7l')) && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
 
     steps:
     - uses: actions/checkout@v7

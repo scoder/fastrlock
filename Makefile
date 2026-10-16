@@ -17,8 +17,11 @@ MANYLINUX_IMAGES= \
     manylinux_2_24_aarch64 \
     manylinux_2_28_x86_64 \
     manylinux_2_28_aarch64 \
+	manylinux_2_39_aarch64 \
+	manylinux_2_39_riscv64 \
     musllinux_1_1_x86_64 \
-    musllinux_1_1_aarch64
+    musllinux_1_1_aarch64 \
+	musllinux_1_2_riscv64
 
 .PHONY: all version inplace sdist build clean wheel_manylinux wheel
 
@@ -48,7 +51,7 @@ wheel_manylinux: sdist $(addprefix wheel_,$(MANYLINUX_IMAGES))
 ifeq ($(strip $(shell uname -m)),x86_64)
 $(addprefix wheel_,$(filter-out %_x86_64, $(filter-out %_i686, $(MANYLINUX_IMAGES)))): qemu-user-static
 else ifeq ($(strip $(shell uname -m)),aarch64)
-$(addprefix wheel_,$(filter-out %_aarch64, $(MANYLINUX_IMAGES))): qemu-user-static
+$(addprefix wheel_,$(filter-out %_aarch64, $(filter-out %_armv7l, $(MANYLINUX_IMAGES)))): qemu-user-static
 endif
 
 wheel_%: dist/$(PACKAGENAME)-$(VERSION).tar.gz
