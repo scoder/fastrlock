@@ -1,11 +1,17 @@
-PYTHON2?=python
 PYTHON?=python3
 SETUPFLAGS=
 PACKAGENAME=fastrlock
-VERSION=$(shell python -c 'import re; f=open("fastrlock/__init__.py"); print(re.search("__version__\\s*=\\s*[\x27\x22](.+)[\x27\x22]", f.read()).group(1)); f.close()')
 
-PYTHON_WITH_CYTHON=$(shell $(PYTHON)  -c 'import Cython.Compiler' >/dev/null 2>/dev/null && echo " --with-cython" || true)
-PY2_WITH_CYTHON=$(shell $(PYTHON2) -c 'import Cython.Compiler' >/dev/null 2>/dev/null && echo " --with-cython" || true)
+VERSION ::= $(shell python -c 'import re; f=open("fastrlock/__init__.py"); print(re.search("__version__\\s*=\\s*[\x27\x22](.+)[\x27\x22]", f.read()).group(1)); f.close()')
+
+ARCH_NAME ::= $(strip $(shell uname -m))
+ifeq ($(ARCH_NAME),x86_64)
+CFLAGS ::= -O3 -g1 -mtune=generic
+else
+CFLAGS ::= -O3 -g1
+endif
+
+PYTHON_WITH_CYTHON ::= $(shell $(PYTHON)  -c 'import Cython.Compiler' >/dev/null 2>/dev/null && echo " --with-cython" || true)
 
 # manylinux1 images still include Python 2.7
 MANYLINUX_PYTHON?=cp*
@@ -48,9 +54,9 @@ qemu-user-static:
 
 wheel_manylinux: sdist $(addprefix wheel_,$(MANYLINUX_IMAGES))
 
-ifeq ($(strip $(shell uname -m)),x86_64)
+ifeq ($(ARCH_NAME),x86_64)
 $(addprefix wheel_,$(filter-out %_x86_64, $(filter-out %_i686, $(MANYLINUX_IMAGES)))): qemu-user-static
-else ifeq ($(strip $(shell uname -m)),aarch64)
+else ifeq ($(ARCH_NAME),aarch64)
 $(addprefix wheel_,$(filter-out %_aarch64, $(filter-out %_armv7l, $(MANYLINUX_IMAGES)))): qemu-user-static
 endif
 
@@ -59,7 +65,7 @@ wheel_%: dist/$(PACKAGENAME)-$(VERSION).tar.gz
 	mkdir -p wheelhouse_$(subst wheel_,,$@)
 	time docker run --rm -t \
 		-v $(shell pwd):/io \
-		-e CFLAGS="-O3 -g1 -mtune=generic -pipe -fPIC -std=c99" \
+		-e CFLAGS="$(CFLAGS) -fPIC -pipe -std=c99" \
 		-e LDFLAGS="$(LDFLAGS) -fPIC" \
 		-e WHEELHOUSE=wheelhouse_$(subst wheel_,,$@) \
 		quay.io/pypa/$(subst wheel_,,$@) \
